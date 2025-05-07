@@ -129,3 +129,4 @@ if __name__ == "__main__":
     # print("\nTesting with different parameters (e.g., non-Helmholtz):")
     # plot_magnetic_field_streamplot(0.5, 0.5, 0.8)
     # plot_magnetic_field_streamplot(0.3, 0.7, 0.6)
+    
