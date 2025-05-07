@@ -211,9 +211,9 @@ if __name__ == "__main__":
     print(f"计算值 Gamma({a_test}) = {gamma_calc:.8f}")
     print(f"精确值 sqrt(pi)/2 = {gamma_exact:.8f}")
     # TODO: 计算并打印相对误差
-    # if gamma_exact != 0:
-          relative_error = abs(gamma_calc - gamma_exact) / abs(gamma_exact)
-          print(f"相对误差 = {relative_error:.4e}")
+    if gamma_exact != 0:
+        relative_error = abs(gamma_calc - gamma_exact) / abs(gamma_exact)
+        print(f"相对误差 = {relative_error:.4e}")
 
     # --- Task 5 ---
     print("\n--- Task 5: 测试整数 Gamma(a) = (a-1)! ---")
