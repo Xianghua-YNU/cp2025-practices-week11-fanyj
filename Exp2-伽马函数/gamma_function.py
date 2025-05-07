@@ -226,9 +226,9 @@ if __name__ == "__main__":
         print(f"  计算值 = {gamma_int_calc:.8f}")
         print(f"  精确值 ({a_int-1}!) = {exact_factorial:.8f}")
         # TODO: 计算并打印相对误差
-        # if exact_factorial != 0:
-              relative_error_int = abs(gamma_int_calc - exact_factorial) / abs(exact_factorial)
-              print(f"  相对误差 = {relative_error_int:.4e}")
+    if exact_factorial != 0:
+        relative_error_int = abs(gamma_int_calc - exact_factorial) / abs(exact_factorial)
+        print(f"  相对误差 = {relative_error_int:.4e}")
 
     # --- 显示图像 ---
     plt.show() # 取消注释以显示 Task 1 的图像
