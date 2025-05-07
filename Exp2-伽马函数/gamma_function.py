@@ -33,13 +33,21 @@ def integrand_gamma(x, a):
 
     if x == 0:
         # TODO: 处理 x=0 的情况 (考虑 a>1, a=1, a<1)
-        pass # Placeholder
+        if a > 1:
+            return 0.0
+        elif a == 1:
+            return 1.0
+        else:
+            return float('inf') # Placeholder
     elif x > 0:
         # TODO: 计算 x > 0 的情况，建议使用 log/exp 技巧
         try:
             # log_f = ...
             # return exp(log_f)
-            pass # Placeholder
+            log_f = (a - 1) * log(x) - x
+            return exp(log_f)
+        except ValueError:
+            return np.nan  # Placeholder
         except ValueError:
             return np.nan # 处理可能的计算错误
     else: # 理论上不会进入这里
@@ -61,13 +69,13 @@ def plot_integrands():
         y_vals = np.zeros_like(x_vals) # Placeholder
 
         # TODO: 绘制曲线 plt.plot(...)
-        # plt.plot(x_vals, y_vals, label=f'$a = {a_val}$')
+        plt.plot(x_vals, y_vals, label=f'$a = {a_val}$')
 
         # TODO: (可选) 标记理论峰值位置 x = a-1
-        # peak_x = a_val - 1
-        # if peak_x > 0:
-        #    peak_y = integrand_gamma(peak_x, a_val)
-        #    plt.plot(peak_x, peak_y, 'o', ms=5)
+        peak_x = a_val - 1
+        if peak_x > 0:
+            peak_y = integrand_gamma(peak_x, a_val)
+            plt.plot(peak_x, peak_y, 'o', ms=5)
 
     plt.xlabel("$x$")
     plt.ylabel("$f(x, a) = x^{a-1} e^{-x}$")
@@ -169,12 +177,12 @@ def gamma_function(a):
     try:
         if a > 1.0:
             # TODO: 使用数值积分计算变换后的积分从 0 到 1
-            # integral_value, error = quad(transformed_integrand_gamma, 0, 1, args=(a,))
-            pass # Placeholder
+            integral_value, error = quad(transformed_integrand_gamma, 0, 1, args=(a,))
+            # Placeholder
         else: # a <= 1
             # TODO: 使用数值积分计算原始积分从 0 到 inf
-            # integral_value, error = quad(integrand_gamma, 0, np.inf, args=(a,))
-            pass # Placeholder
+            integral_value, error = quad(integrand_gamma, 0, np.inf, args=(a,))
+            # Placeholder
 
         # print(f"Integration error estimate for a={a}: {error}") # Optional: print error
         return integral_value
@@ -187,7 +195,7 @@ def gamma_function(a):
 if __name__ == "__main__":
     # --- Task 1 ---
     print("--- Task 1: 绘制被积函数 ---")
-    # plot_integrands() # 取消注释以执行绘图
+    plot_integrands() # 取消注释以执行绘图
 
     # --- Task 2 & 3 ---
     print("\n--- Task 2 & 3: 解析推导见代码注释/报告 ---")
@@ -204,8 +212,8 @@ if __name__ == "__main__":
     print(f"精确值 sqrt(pi)/2 = {gamma_exact:.8f}")
     # TODO: 计算并打印相对误差
     # if gamma_exact != 0:
-    #     relative_error = abs(gamma_calc - gamma_exact) / abs(gamma_exact)
-    #     print(f"相对误差 = {relative_error:.4e}")
+          relative_error = abs(gamma_calc - gamma_exact) / abs(gamma_exact)
+          print(f"相对误差 = {relative_error:.4e}")
 
     # --- Task 5 ---
     print("\n--- Task 5: 测试整数 Gamma(a) = (a-1)! ---")
@@ -219,8 +227,8 @@ if __name__ == "__main__":
         print(f"  精确值 ({a_int-1}!) = {exact_factorial:.8f}")
         # TODO: 计算并打印相对误差
         # if exact_factorial != 0:
-        #     relative_error_int = abs(gamma_int_calc - exact_factorial) / abs(exact_factorial)
-        #     print(f"  相对误差 = {relative_error_int:.4e}")
+              relative_error_int = abs(gamma_int_calc - exact_factorial) / abs(exact_factorial)
+              print(f"  相对误差 = {relative_error_int:.4e}")
 
     # --- 显示图像 ---
-    # plt.show() # 取消注释以显示 Task 1 的图像
+    plt.show() # 取消注释以显示 Task 1 的图像
