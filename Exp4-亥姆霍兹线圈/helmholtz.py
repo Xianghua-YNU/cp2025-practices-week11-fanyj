@@ -50,10 +50,10 @@ def Helmholtz_coils(r_low, r_up, d):
     dBz_integrand = r_low * (r_low - Y * np.sin(Phi)) / dist1 ** 3 + \
                     r_up * (r_up - Y * np.sin(Phi)) / dist2 ** 3
 
-    # 6. 对 phi_angles 进行数值积分 (例如使用 np.trapezoid)
+    # 6. 对 phi_angles 进行数值积分 (例如使用 np.trapz)
     delta_phi = phi_angles[1] - phi_angles[0]  # 如果trapz的dx参数需要
-    By_unscaled = np.trapezoid(dBy_integrand, x=phi_angles, axis=-1)  # 或 dx=delta_phi
-    Bz_unscaled = np.trapezoid(dBz_integrand, x=phi_angles, axis=-1)  # 或 dx=delta_phi
+    By_unscaled = np.trapz(dBy_integrand, x=phi_angles, axis=-1)  # 或 dx=delta_phi
+    Bz_unscaled = np.trapz(dBz_integrand, x=phi_angles, axis=-1)  # 或 dx=delta_phi
 
     # 7. 引入物理常数因子得到真实的磁场值 (单位 T)
     scaling_factor = (MU0 * I) / (4 * np.pi)
