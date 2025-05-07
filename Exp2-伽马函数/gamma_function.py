@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from scipy.integrate import quad
 from math import factorial, sqrt, pi, exp, log
 
-# --- Task 1: 绘制被积函数 ---
 
+# --- Task 1: 绘制被积函数 ---
 def integrand_gamma(x, a):
     """
     计算伽马函数的原始被积函数: f(x, a) = x^(a-1) * exp(-x)
@@ -22,7 +22,7 @@ def integrand_gamma(x, a):
     """
     # 实现被积函数的计算逻辑
     if x < 0:
-        return 0.0 
+        return 0.0
     if x == 0:
         if a > 1:
             return 0.0
@@ -35,17 +35,14 @@ def integrand_gamma(x, a):
             log_f = (a - 1) * log(x) - x
             return exp(log_f)
         except ValueError:
-            return np.nan 
-    else: 
+            return np.nan
+    else:
         return np.nan
-
-    # 临时返回值，需要替换
-    return 0.0
 
 
 def plot_integrands():
     """绘制 a=2, 3, 4 时的被积函数图像"""
-    x_vals = np.linspace(0.01, 10, 400) 
+    x_vals = np.linspace(0.01, 10, 400)
     plt.figure(figsize=(10, 6))
 
     print("绘制被积函数图像...")
@@ -63,11 +60,12 @@ def plot_integrands():
     plt.xlabel("$x$")
     plt.ylabel("$f(x, a) = x^{a-1} e^{-x}$")
     plt.title("Integrand of the Gamma Function")
-    plt.legend() 
+    plt.legend()
     plt.grid(True)
     plt.ylim(bottom=0)
     plt.xlim(left=0)
-    # plt.show() 
+    # plt.show()
+
 
 # --- Task 2 & 3: 解析推导 (在注释或报告中完成) ---
 # Task 2: 峰值位置推导
@@ -83,7 +81,6 @@ def plot_integrands():
 #    结果: c = a - 1
 
 # --- Task 4: 实现伽马函数计算 ---
-
 def transformed_integrand_gamma(z, a):
     """
     计算变换后的被积函数 g(z, a) = f(x(z), a) * dx/dz
@@ -106,13 +103,21 @@ def transformed_integrand_gamma(z, a):
     # 首先处理 c = a-1
     c = a - 1.0
     if c <= 0:
-        if a <= 1: 
-             print(f"警告: transformed_integrand_gamma 假定 a > 1，但接收到 a={a}")
-             return np.nan 
+        if z < 0 or z > 1:
+            return 0.0
+        if z == 1:
+            return 0.0
+        # 当 a <= 1 时，直接按原函数逻辑在对应 z 下计算 x 代入原被积函数
+        x = c * z / (1 - z)
+        if x < 0:
+            return 0.0
+        return integrand_gamma(x, a)
 
     # 处理 z 的边界
-    if z < 0 or z > 1: return 0.0
-    if z == 1: return 0.0 
+    if z < 0 or z > 1:
+        return 0.0
+    if z == 1:
+        return 0.0
 
     x = c * z / (1 - z)
     dxdz = c / (1 - z) ** 2
@@ -122,9 +127,10 @@ def transformed_integrand_gamma(z, a):
 
     # 检查结果是否有效
     if not np.isfinite(result):
-        return 0.0 
+        return 0.0
 
     return result
+
 
 def gamma_function(a):
     """
@@ -146,26 +152,27 @@ def gamma_function(a):
         print(f"错误: Gamma(a) 对 a={a} <= 0 无定义。")
         return np.nan
 
-    integral_value = np.nan 
+    integral_value = np.nan
 
     try:
         if a > 1.0:
             integral_value, error = quad(transformed_integrand_gamma, 0, 1, args=(a,))
-        else: 
+        else:
             integral_value, error = quad(integrand_gamma, 0, np.inf, args=(a,))
 
-        # print(f"Integration error estimate for a={a}: {error}") 
+        # print(f"Integration error estimate for a={a}: {error}")
         return integral_value
 
     except Exception as e:
         print(f"计算 Gamma({a}) 时发生错误: {e}")
         return np.nan
 
+
 # --- 主程序 ---
 if __name__ == "__main__":
     # --- Task 1 ---
     print("--- Task 1: 绘制被积函数 ---")
-    plot_integrands() 
+    plot_integrands()
 
     # --- Task 2 & 3 ---
     print("\n--- Task 2 & 3: 解析推导见代码注释/报告 ---")
@@ -189,10 +196,10 @@ if __name__ == "__main__":
         gamma_int_calc = gamma_function(a_int)
         exact_factorial = float(factorial(a_int - 1))
         print(f"  计算值 = {gamma_int_calc:.8f}")
-        print(f"  精确值 ({a_int-1}!) = {exact_factorial:.8f}")
+        print(f"  精确值 ({a_int - 1}!) = {exact_factorial:.8f}")
         if exact_factorial != 0:
             relative_error_int = abs(gamma_int_calc - exact_factorial) / abs(exact_factorial)
             print(f"  相对误差 = {relative_error_int:.4e}")
 
     # --- 显示图像 ---
-    plt.show() 
+    plt.show()
