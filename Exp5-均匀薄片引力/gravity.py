@@ -9,9 +9,11 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.integrate import dblquad  # 引入scipy的二重积分函数
 
 # 物理常数
 G = 6.67430e-11  # 万有引力常数 (单位: m^3 kg^-1 s^-2)
+
 
 def calculate_sigma(length, mass):
     """
@@ -26,6 +28,7 @@ def calculate_sigma(length, mass):
     """
     return mass / (length ** 2)
 
+
 def integrand(x, y, z):
     """
     被积函数，计算引力积分核
@@ -39,6 +42,7 @@ def integrand(x, y, z):
     """
     r = np.sqrt(x ** 2 + y ** 2 + z ** 2)
     return z / (r ** 3)
+
 
 def gauss_legendre_integral(length, z, n_points=100):
     """
@@ -70,6 +74,7 @@ def gauss_legendre_integral(length, z, n_points=100):
 
     return (0.25 * length ** 2) * integral
 
+
 def calculate_force(length, mass, z, method='gauss'):
     """
     计算给定高度处的引力
@@ -86,9 +91,15 @@ def calculate_force(length, mass, z, method='gauss'):
     sigma = calculate_sigma(length, mass)
     if method == 'gauss':
         integral_result = gauss_legendre_integral(length, z)
+    elif method =='scipy':
+        # 使用scipy进行二重积分计算
+        integral_result, _ = dblquad(lambda y, x: integrand(x, y, z),
+                                     -length / 2, length / 2,
+                                     lambda x: -length / 2, lambda x: length / 2)
     else:
-        raise ValueError("仅支持 'gauss' 积分方法。")
+        raise ValueError("仅支持 'gauss' 或'scipy' 积分方法。")
     return G * sigma * integral_result
+
 
 def plot_force_vs_height(length, mass, z_min=0.1, z_max=10, n_points=100):
     """
@@ -116,6 +127,7 @@ def plot_force_vs_height(length, mass, z_min=0.1, z_max=10, n_points=100):
     plt.grid(True)
     plt.show()
 
+
 # 示例使用
 if __name__ == '__main__':
     # 参数设置 (边长10m，质量1e4kg)
@@ -129,4 +141,3 @@ if __name__ == '__main__':
     for z in [0.1, 1, 5, 10]:
         F = calculate_force(length, mass, z)
         print(f"高度 z = {z:.1f}m 处的引力 F_z = {F:.3e} N")
-    
